@@ -6,7 +6,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Instalar dependencias
-RUN npm ci
+RUN npm install
 
 # Copiar el código fuente
 COPY . .
@@ -21,7 +21,7 @@ WORKDIR /app
 
 # Instalar solo dependencias de producción
 COPY package*.json ./
-RUN npm ci --only=production && npm install express
+RUN npm install --omit=dev express
 
 # Copiar el servidor
 COPY server.js ./
