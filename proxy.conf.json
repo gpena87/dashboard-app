@@ -1,0 +1,7 @@
+{
+  "/api": {
+    "target": "https://wedding-api-production-2678.up.railway.app",
+    "secure": true,
+    "changeOrigin": true
+  }
+}

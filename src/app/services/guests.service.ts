@@ -19,7 +19,7 @@ export interface Guest {
   providedIn: 'root'
 })
 export class GuestsService {
-  private readonly apiUrl = 'https://wedding-api-production-2678.up.railway.app/api/users';
+  private readonly apiUrl = '/api/users';
 
   constructor(private http: HttpClient) {}
 
