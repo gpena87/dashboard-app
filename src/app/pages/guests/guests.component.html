@@ -18,6 +18,7 @@
               <th>Restricción</th>
               <th>Confirmación</th>
               <th>Fecha</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -30,6 +31,11 @@
                 <td>{{ guest.restriccion }}</td>
                 <td>{{ guest.confirmation ? 'Confirmado' : 'Pendiente' }}</td>
                 <td>{{ guest.createdAt | date:'yyyy-MM-dd' }}</td>
+                <td>
+                  <button type="button" class="btn btn-sm btn-error" (click)="deleteGuest(guest._id)">
+                    Eliminar
+                  </button>
+                </td>
               </tr>
             }
           </tbody>

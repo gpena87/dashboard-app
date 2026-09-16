@@ -28,4 +28,15 @@ export class GuestsComponent implements OnInit {
       }
     });
   }
+
+  deleteGuest(id: string): void {
+    this.guestsService.deleteGuest(id).subscribe({
+      next: () => {
+        this.guests.update((guests) => guests.filter((guest) => guest._id !== id));
+      },
+      error: () => {
+        this.error.set('No se pudo eliminar el invitado.');
+      }
+    });
+  }
 }

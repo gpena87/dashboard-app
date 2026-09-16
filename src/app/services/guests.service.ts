@@ -26,4 +26,8 @@ export class GuestsService {
   getGuests(): Observable<Guest[]> {
     return this.http.get<Guest[]>(this.apiUrl);
   }
+
+  deleteGuest(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
 }
