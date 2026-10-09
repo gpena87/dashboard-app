@@ -2,7 +2,10 @@
   <div class="flex-1">
     <button type="button" class="btn btn-ghost text-xl" (click)="refresh()">Wedding</button>
   </div>
-  <div class="flex-none">
+  <div class="flex flex-none gap-2">
+    <button type="button" class="btn btn-ghost" (click)="toggleTheme()">
+      {{ theme() === 'dark' ? '☀️ Claro' : '🌙 Oscuro' }}
+    </button>
     <button type="button" class="btn btn-ghost" [disabled]="exporting()" (click)="exportGuests()">
       {{ exporting() ? 'Generando...' : 'Generar Excel' }}
     </button>

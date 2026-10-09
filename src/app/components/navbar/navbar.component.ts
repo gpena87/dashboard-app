@@ -1,6 +1,8 @@
 import { Component, signal } from '@angular/core';
 import { GuestsService } from '../../services/guests.service';
 
+const THEME_KEY = 'theme';
+
 @Component({
   selector: 'app-navbar',
   imports: [],
@@ -8,8 +10,30 @@ import { GuestsService } from '../../services/guests.service';
 })
 export class NavbarComponent {
   exporting = signal(false);
+  theme = signal<'light' | 'dark'>(this.initialTheme());
 
-  constructor(private guestsService: GuestsService) {}
+  constructor(private guestsService: GuestsService) {
+    this.applyTheme(this.theme());
+  }
+
+  toggleTheme(): void {
+    const next = this.theme() === 'dark' ? 'light' : 'dark';
+    this.theme.set(next);
+    this.applyTheme(next);
+    localStorage.setItem(THEME_KEY, next);
+  }
+
+  private initialTheme(): 'light' | 'dark' {
+    const saved = localStorage.getItem(THEME_KEY);
+    if (saved === 'light' || saved === 'dark') {
+      return saved;
+    }
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  }
+
+  private applyTheme(theme: 'light' | 'dark'): void {
+    document.documentElement.setAttribute('data-theme', theme);
+  }
 
   refresh(): void {
     window.location.reload();
