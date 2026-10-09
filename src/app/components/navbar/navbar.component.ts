@@ -11,6 +11,10 @@ export class NavbarComponent {
 
   constructor(private guestsService: GuestsService) {}
 
+  refresh(): void {
+    window.location.reload();
+  }
+
   exportGuests(): void {
     this.exporting.set(true);
     this.guestsService.getGuests().subscribe({
