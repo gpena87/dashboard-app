@@ -15,6 +15,10 @@ export interface Guest {
   updatedAt: string;
 }
 
+export type GuestUpdate = Partial<
+  Pick<Guest, 'name' | 'lastName' | 'email' | 'numberPhone' | 'confirmation' | 'restriccion' | 'message'>
+>;
+
 @Injectable({
   providedIn: 'root'
 })
@@ -25,6 +29,10 @@ export class GuestsService {
 
   getGuests(): Observable<Guest[]> {
     return this.http.get<Guest[]>(this.apiUrl);
+  }
+
+  updateGuest(id: string, changes: GuestUpdate): Observable<Guest> {
+    return this.http.patch<Guest>(`${this.apiUrl}/${id}`, changes);
   }
 
   deleteGuest(id: string): Observable<void> {

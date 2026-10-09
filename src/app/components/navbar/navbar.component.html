@@ -1,3 +1,10 @@
 <div class="navbar navbar-fixed bg-primary text-primary-content sticky top-0 z-50 shadow-md">
-  <button class="btn btn-ghost text-xl">daisyUI</button>
+  <div class="flex-1">
+    <button class="btn btn-ghost text-xl">Wedding</button>
+  </div>
+  <div class="flex-none">
+    <button type="button" class="btn btn-ghost" [disabled]="exporting()" (click)="exportGuests()">
+      {{ exporting() ? 'Generando...' : 'Generar Excel' }}
+    </button>
+  </div>
 </div>

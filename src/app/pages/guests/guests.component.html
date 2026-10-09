@@ -1,47 +1,168 @@
-<app-navbar/>
-<div class="guests-container pt-2">
-  <div class="guests-content">
-    @if (loading()) {
-      <p>Cargando invitados...</p>
-    } @else if (error()) {
-      <p class="text-error">{{ error() }}</p>
-    } @else {
-      <div class="overflow-x-auto">
-        <table class="table">
-          <!-- head -->
-          <thead>
-            <tr>
-              <th></th>
-              <th>Nombre</th>
-              <th>Email</th>
-              <th>Número</th>
-              <th>Restricción</th>
-              <th>Confirmación</th>
-              <th>Fecha</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            @for (guest of guests(); track guest._id; let i = $index) {
-              <tr class="hover">
-                <th>{{ i + 1 }}</th>
-                <td>{{ guest.name }} {{ guest.lastName }}</td>
-                <th>{{ guest.email }}</th>
-                <td>{{ guest.numberPhone }}</td>
-                <td>{{ guest.restriccion }}</td>
-                <td>{{ guest.confirmation ? 'Confirmado' : 'Pendiente' }}</td>
-                <td>{{ guest.createdAt | date:'yyyy-MM-dd' }}</td>
-                <td>
-                  <button type="button" class="btn btn-sm btn-error" (click)="deleteGuest(guest._id)">
-                    Eliminar
-                  </button>
-                </td>
+<div class="flex min-h-screen flex-col">
+  <app-navbar/>
+  <div class="guests-container flex flex-1 flex-col pt-2">
+    <div class="guests-content flex flex-1 flex-col">
+      @if (loading()) {
+        <p>Cargando invitados...</p>
+      } @else if (error()) {
+        <p class="text-error">{{ error() }}</p>
+      } @else {
+        <div class="overflow-x-auto">
+          <table class="table">
+            <!-- head -->
+            <thead>
+              <tr>
+                <th></th>
+                <th>Nombre</th>
+                <th>Email</th>
+                <th>Número</th>
+                <th>Restricción</th>
+                <th>Confirmación</th>
+                <th>Fecha</th>
+                <th>Mensaje</th>
+                <th></th>
               </tr>
-            }
-          </tbody>
-        </table>
-      </div>
-    }
+              <tr>
+                <th>
+                  @if (hasActiveFilters()) {
+                    <button type="button" class="btn btn-xs btn-ghost" title="Limpiar filtros" (click)="clearFilters()">✕</button>
+                  }
+                </th>
+                <th>
+                  <input type="text" class="input input-xs input-bordered w-full min-w-24 font-normal" placeholder="Filtrar" [value]="filters().name" (input)="setFilter('name', $any($event.target).value)" />
+                </th>
+                <th>
+                  <input type="text" class="input input-xs input-bordered w-full min-w-24 font-normal" placeholder="Filtrar" [value]="filters().email" (input)="setFilter('email', $any($event.target).value)" />
+                </th>
+                <th>
+                  <input type="text" class="input input-xs input-bordered w-full min-w-24 font-normal" placeholder="Filtrar" [value]="filters().numberPhone" (input)="setFilter('numberPhone', $any($event.target).value)" />
+                </th>
+                <th>
+                  <input type="text" class="input input-xs input-bordered w-full min-w-24 font-normal" placeholder="Filtrar" [value]="filters().restriccion" (input)="setFilter('restriccion', $any($event.target).value)" />
+                </th>
+                <th>
+                  <select class="select select-xs select-bordered w-full font-normal" [value]="filters().confirmation" (change)="setFilter('confirmation', $any($event.target).value)">
+                    <option value="">Todos</option>
+                    <option value="true">Confirmado</option>
+                    <option value="false">Pendiente</option>
+                  </select>
+                </th>
+                <th>
+                  <input type="text" class="input input-xs input-bordered w-full min-w-24 font-normal" placeholder="aaaa-mm-dd" [value]="filters().createdAt" (input)="setFilter('createdAt', $any($event.target).value)" />
+                </th>
+                <th>
+                  <input type="text" class="input input-xs input-bordered w-full min-w-24 font-normal" placeholder="Filtrar" [value]="filters().message" (input)="setFilter('message', $any($event.target).value)" />
+                </th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (guest of filteredGuests(); track guest._id; let i = $index) {
+                <tr class="hover">
+                  <th>{{ i + 1 }}</th>
+                  <td>{{ guest.name }} {{ guest.lastName }}</td>
+                  <th>{{ guest.email }}</th>
+                  <td>{{ guest.numberPhone }}</td>
+                  <td>
+                    @if (hasRestriction(guest.restriccion)) {
+                      <span class="badge badge-secondary font-semibold">{{ guest.restriccion }}</span>
+                    } @else {
+                      {{ guest.restriccion }}
+                    }
+                  </td>
+                  <td>{{ guest.confirmation ? 'Confirmado' : 'Pendiente' }}</td>
+                  <td>{{ guest.createdAt | date:'yyyy-MM-dd' }}</td>
+                  <td>{{ guest.message }}</td>
+                  <td class="whitespace-nowrap">
+                    <button type="button" class="btn btn-sm btn-info mr-2" (click)="startEdit(guest)">
+                      Editar
+                    </button>
+                    <button type="button" class="btn btn-sm btn-error" (click)="requestDelete(guest)">
+                      Eliminar
+                    </button>
+                  </td>
+                </tr>
+              } @empty {
+                <tr>
+                  <td colspan="9" class="text-center">No hay invitados que coincidan con los filtros.</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+        <div class="mt-auto flex flex-wrap gap-4 pb-4 pt-6">
+          <app-confirmed-guests [count]="confirmedGuestsCount()"/>
+          <app-restricted-guests [count]="restrictedGuestsCount()"/>
+        </div>
+      }
+    </div>
   </div>
+  @if (editingId()) {
+    <div class="modal modal-open">
+      <form class="modal-box" (ngSubmit)="saveEdit()" #editForm="ngForm">
+        <h3 class="mb-4 text-lg font-bold">Editar invitado</h3>
+        <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+          <label class="form-control">
+            <span class="label-text mb-1">Nombre</span>
+            <input name="name" class="input input-bordered w-full" required [(ngModel)]="editDraft.name" />
+          </label>
+          <label class="form-control">
+            <span class="label-text mb-1">Apellido</span>
+            <input name="lastName" class="input input-bordered w-full" required [(ngModel)]="editDraft.lastName" />
+          </label>
+          <label class="form-control">
+            <span class="label-text mb-1">Email</span>
+            <input name="email" type="email" class="input input-bordered w-full" required [(ngModel)]="editDraft.email" />
+          </label>
+          <label class="form-control">
+            <span class="label-text mb-1">Número</span>
+            <input name="numberPhone" class="input input-bordered w-full" [(ngModel)]="editDraft.numberPhone" />
+          </label>
+          <label class="form-control">
+            <span class="label-text mb-1">Restricción</span>
+            <input name="restriccion" class="input input-bordered w-full" [(ngModel)]="editDraft.restriccion" />
+          </label>
+          <label class="form-control">
+            <span class="label-text mb-1">Confirmación</span>
+            <select name="confirmation" class="select select-bordered w-full" [(ngModel)]="editDraft.confirmation">
+              <option [ngValue]="true">Confirmado</option>
+              <option [ngValue]="false">Pendiente</option>
+            </select>
+          </label>
+          <label class="form-control sm:col-span-2">
+            <span class="label-text mb-1">Mensaje</span>
+            <textarea name="message" class="textarea textarea-bordered w-full" rows="3" [(ngModel)]="editDraft.message"></textarea>
+          </label>
+        </div>
+        @if (editError()) {
+          <p class="mt-3 text-error">{{ editError() }}</p>
+        }
+        <div class="modal-action">
+          <button type="button" class="btn" [disabled]="saving()" (click)="cancelEdit()">Cancelar</button>
+          <button type="submit" class="btn btn-primary" [disabled]="saving() || editForm.invalid">
+            {{ saving() ? 'Guardando...' : 'Guardar' }}
+          </button>
+        </div>
+      </form>
+      <div class="modal-backdrop" (click)="cancelEdit()"></div>
+    </div>
+  }
+  @if (deleteTarget(); as target) {
+    <div class="modal modal-open">
+      <div class="modal-box">
+        <h3 class="text-lg font-bold">Eliminar invitado</h3>
+        <p class="py-4">
+          ¿Está seguro de que desea eliminar a <strong>{{ target.name }} {{ target.lastName }}</strong>? Esta acción no se puede deshacer.
+        </p>
+        <div class="modal-action">
+          <button type="button" class="btn" [disabled]="deleting()" (click)="cancelDelete()">No</button>
+          <button type="button" class="btn btn-error" [disabled]="deleting()" (click)="confirmDelete()">
+            {{ deleting() ? 'Eliminando...' : 'Sí, eliminar' }}
+          </button>
+        </div>
+      </div>
+      <div class="modal-backdrop" (click)="cancelDelete()"></div>
+    </div>
+  }
+  <app-footer/>
 </div>
-<app-footer/>
