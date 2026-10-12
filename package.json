@@ -7,7 +7,7 @@
     "build": "ng build --configuration production",
     "build:dev": "ng build --watch --configuration development",
     "dev": "ng serve",
-    "dev:qa": "ng serve --proxy-config proxy.conf.qa.json",
+    "dev:qa": "ng serve --configuration qa",
     "start:qa": "npm run build && node server.js qa",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"

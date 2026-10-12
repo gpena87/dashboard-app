@@ -20,6 +20,10 @@ if (!API_TARGET) {
   throw new Error(`Entorno desconocido: ${environment}. Usa "qa" o "production".`);
 }
 
+app.get('/runtime-config.json', (req, res) => {
+  res.json({ isQA: environment === 'qa' });
+});
+
 // Proxy hacia la API para evitar bloqueos de CORS en producción
 app.use('/api', express.json(), async (req, res) => {
   try {

@@ -1,6 +1,8 @@
 <div class="navbar navbar-fixed bg-primary text-primary-content sticky top-0 z-50 shadow-md">
   <div class="flex-1">
-    <button type="button" class="btn btn-ghost text-xl" (click)="refresh()">Wedding</button>
+    <button type="button" class="btn btn-ghost text-xl" (click)="refresh()">
+      Wedding @if (isQA()) { <span class="badge badge-warning badge-sm">QA</span> }
+    </button>
   </div>
   <div class="flex flex-none gap-2">
     <button type="button" class="btn btn-ghost" (click)="toggleTheme()">

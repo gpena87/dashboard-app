@@ -59,7 +59,8 @@ docker run -p 3000:3000 dashboard-app
 
 El servidor detecta QA automáticamente cuando el nombre del entorno o la rama
 de Railway contiene `QA`. También puedes fijar el entorno con `APP_ENV=qa` en
-las variables del servicio. Producción sigue siendo el valor predeterminado.
+las variables del servicio. El navbar muestra una etiqueta `QA` cuando la app
+está en ese entorno. Producción sigue siendo el valor predeterminado.
 
 ## Notas importantes
 

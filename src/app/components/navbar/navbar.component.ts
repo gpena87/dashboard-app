@@ -1,5 +1,7 @@
 import { Component, signal } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { GuestsService } from '../../services/guests.service';
+import { environment } from '../../../environments/environment';
 
 const THEME_KEY = 'theme';
 
@@ -10,10 +12,17 @@ const THEME_KEY = 'theme';
 })
 export class NavbarComponent {
   exporting = signal(false);
+  isQA = signal(environment.isQA);
   theme = signal<'light' | 'dark'>(this.initialTheme());
 
-  constructor(private guestsService: GuestsService) {
+  constructor(private guestsService: GuestsService, private http: HttpClient) {
     this.applyTheme(this.theme());
+    if (environment.production) {
+      this.http.get<{ isQA: boolean }>('/runtime-config.json').subscribe({
+        next: (config) => this.isQA.set(config.isQA),
+        error: (error) => console.error('No se pudo determinar el entorno de la aplicación', error),
+      });
+    }
   }
 
   toggleTheme(): void {
