@@ -2,7 +2,16 @@ const express = require('express');
 const path = require('path');
 const app = express();
 
-const API_TARGET = 'https://wedding-api-production-2678.up.railway.app';
+const API_TARGETS = {
+  production: 'https://wedding-api-production-2678.up.railway.app',
+  qa: 'https://wedding-api-qa.up.railway.app'
+};
+const environment = process.env.APP_ENV || process.argv[2] || 'production';
+const API_TARGET = process.env.API_TARGET || API_TARGETS[environment];
+
+if (!API_TARGET) {
+  throw new Error(`Entorno desconocido: ${environment}. Usa "qa" o "production".`);
+}
 
 // Proxy hacia la API para evitar bloqueos de CORS en producción
 app.use('/api', express.json(), async (req, res) => {

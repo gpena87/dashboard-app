@@ -10,7 +10,9 @@
 ## Scripts disponibles
 
 - `npm start` - Build para producción + servidor (para Railway)
+- `npm run start:qa` - Build + servidor conectado a la API de QA
 - `npm run dev` - Servidor de desarrollo (ng serve)
+- `npm run dev:qa` - Servidor de desarrollo conectado a la API de QA
 - `npm run build` - Build para producción
 - `npm run build:dev` - Build en modo desarrollo con watch
 
@@ -51,7 +53,13 @@ docker run -p 3000:3000 dashboard-app
 ## Variables de entorno
 
 - `PORT` - Puerto en el que ejecutar el servidor (default: 3000)
+- `APP_ENV` - Entorno del servidor: `production` (default) o `qa`
+- `API_TARGET` - URL opcional para sobrescribir la API seleccionada
 - Railway asigna automáticamente el puerto en su entorno
+
+Para desplegar una instancia de QA en Railway, configura `APP_ENV=qa` en las
+variables del servicio. La instancia de producción puede continuar usando
+`npm start` sin cambios.
 
 ## Notas importantes
 

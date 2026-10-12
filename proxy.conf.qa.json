@@ -1,0 +1,7 @@
+{
+  "/api": {
+    "target": "https://wedding-api-qa.up.railway.app",
+    "secure": true,
+    "changeOrigin": true
+  }
+}
