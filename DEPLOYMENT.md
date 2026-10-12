@@ -57,9 +57,9 @@ docker run -p 3000:3000 dashboard-app
 - `API_TARGET` - URL opcional para sobrescribir la API seleccionada
 - Railway asigna automáticamente el puerto en su entorno
 
-Para desplegar una instancia de QA en Railway, configura `APP_ENV=qa` en las
-variables del servicio. La instancia de producción puede continuar usando
-`npm start` sin cambios.
+El servidor detecta QA automáticamente cuando el nombre del entorno o la rama
+de Railway contiene `QA`. También puedes fijar el entorno con `APP_ENV=qa` en
+las variables del servicio. Producción sigue siendo el valor predeterminado.
 
 ## Notas importantes
 

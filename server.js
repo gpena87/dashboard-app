@@ -6,7 +6,14 @@ const API_TARGETS = {
   production: 'https://wedding-api-production-2678.up.railway.app',
   qa: 'https://wedding-api-qa.up.railway.app'
 };
-const environment = process.env.APP_ENV || process.argv[2] || 'production';
+const railwayContext = [
+  process.env.RAILWAY_ENVIRONMENT_NAME,
+  process.env.RAILWAY_GIT_BRANCH
+].filter(Boolean).join(' ');
+const inferredEnvironment = /(^|[^a-z0-9])qa($|[^a-z0-9])/i.test(railwayContext)
+  ? 'qa'
+  : 'production';
+const environment = process.env.APP_ENV || process.argv[2] || inferredEnvironment;
 const API_TARGET = process.env.API_TARGET || API_TARGETS[environment];
 
 if (!API_TARGET) {
@@ -45,5 +52,5 @@ app.get('*', (req, res) => {
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`Servidor ejecutándose en puerto ${PORT}`);
+  console.log(`Servidor ejecutándose en puerto ${PORT} (${environment}: ${API_TARGET})`);
 });
