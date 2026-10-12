@@ -1,5 +1,5 @@
 <div class="flex min-h-screen flex-col">
-  <app-navbar/>
+  <app-navbar (createGuest)="startCreate()"/>
   <div class="guests-container flex flex-1 flex-col pt-2">
     <div class="guests-content flex flex-1 flex-col">
       @if (loading()) {
@@ -97,6 +97,56 @@
       }
     </div>
   </div>
+  @if (creatingGuest()) {
+    <div class="modal modal-open">
+      <form class="modal-box" (ngSubmit)="saveCreate()" #createForm="ngForm">
+        <h3 class="mb-4 text-lg font-bold">Crear invitado</h3>
+        <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
+          <label class="form-control">
+            <span class="label-text mb-1">Nombre</span>
+            <input name="name" class="input input-bordered w-full" required [(ngModel)]="createDraft.name" />
+          </label>
+          <label class="form-control">
+            <span class="label-text mb-1">Apellido</span>
+            <input name="lastName" class="input input-bordered w-full" required [(ngModel)]="createDraft.lastName" />
+          </label>
+          <label class="form-control">
+            <span class="label-text mb-1">Email</span>
+            <input name="email" type="email" class="input input-bordered w-full" required [(ngModel)]="createDraft.email" />
+          </label>
+          <label class="form-control">
+            <span class="label-text mb-1">Número</span>
+            <input name="numberPhone" class="input input-bordered w-full" [(ngModel)]="createDraft.numberPhone" />
+          </label>
+          <label class="form-control">
+            <span class="label-text mb-1">Restricción</span>
+            <input name="restriccion" class="input input-bordered w-full" [(ngModel)]="createDraft.restriccion" />
+          </label>
+          <label class="form-control">
+            <span class="label-text mb-1">Confirmación</span>
+            <select name="confirmation" class="select select-bordered w-full" [(ngModel)]="createDraft.confirmation">
+              <option [ngValue]="true">Confirmado</option>
+              <option [ngValue]="false">Pendiente</option>
+            </select>
+          </label>
+          <label class="form-control sm:col-span-2">
+            <span class="label-text mb-1">Mensaje</span>
+            <textarea name="message" class="textarea textarea-bordered w-full" rows="3" [(ngModel)]="createDraft.message"></textarea>
+          </label>
+        </div>
+        @if (createError()) {
+          <p class="mt-3 text-error">{{ createError() }}</p>
+        }
+        <div class="modal-action">
+          <button type="button" class="btn" [disabled]="creating()" (click)="cancelCreate()">Cancelar</button>
+          <button type="submit" class="btn btn-primary" [disabled]="creating() || createForm.invalid">
+            {{ creating() ? 'Guardando...' : 'Crear invitado' }}
+          </button>
+        </div>
+      </form>
+      <div class="modal-backdrop" (click)="cancelCreate()"></div>
+    </div>
+  }
   @if (editingId()) {
     <div class="modal modal-open">
       <form class="modal-box" (ngSubmit)="saveEdit()" #editForm="ngForm">

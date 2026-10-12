@@ -31,6 +31,10 @@ export class GuestsService {
     return this.http.get<Guest[]>(this.apiUrl);
   }
 
+  createGuest(guest: GuestUpdate): Observable<Guest> {
+    return this.http.post<Guest>(this.apiUrl, guest);
+  }
+
   updateGuest(id: string, changes: GuestUpdate): Observable<Guest> {
     return this.http.patch<Guest>(`${this.apiUrl}/${id}`, changes);
   }

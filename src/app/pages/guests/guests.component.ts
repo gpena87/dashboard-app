@@ -56,6 +56,10 @@ export class GuestsComponent implements OnInit {
     );
   });
   hasActiveFilters = computed(() => Object.values(this.filters()).some((value) => value.trim() !== ''));
+  creatingGuest = signal(false);
+  createDraft: Required<GuestUpdate> = this.emptyDraft();
+  creating = signal(false);
+  createError = signal<string | null>(null);
   editingId = signal<string | null>(null);
   editDraft: Required<GuestUpdate> = this.emptyDraft();
   saving = signal(false);
@@ -95,6 +99,38 @@ export class GuestsComponent implements OnInit {
 
   private emptyDraft(): Required<GuestUpdate> {
     return { name: '', lastName: '', email: '', numberPhone: '', confirmation: false, restriccion: '', message: '' };
+  }
+
+  startCreate(): void {
+    this.createDraft = this.emptyDraft();
+    this.createError.set(null);
+    this.creatingGuest.set(true);
+  }
+
+  cancelCreate(): void {
+    if (!this.creating()) {
+      this.creatingGuest.set(false);
+    }
+  }
+
+  saveCreate(): void {
+    if (this.creating()) {
+      return;
+    }
+
+    this.creating.set(true);
+    this.createError.set(null);
+    this.guestsService.createGuest({ ...this.createDraft }).subscribe({
+      next: (created) => {
+        this.guests.update((guests) => [created, ...guests]);
+        this.creating.set(false);
+        this.creatingGuest.set(false);
+      },
+      error: () => {
+        this.creating.set(false);
+        this.createError.set('No se pudo crear el invitado.');
+      }
+    });
   }
 
   startEdit(guest: Guest): void {

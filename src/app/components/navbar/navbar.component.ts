@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, EventEmitter, Output, signal } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { GuestsService } from '../../services/guests.service';
 import { environment } from '../../../environments/environment';
@@ -11,7 +11,9 @@ const THEME_KEY = 'theme';
   templateUrl: './navbar.component.html',
 })
 export class NavbarComponent {
+  @Output() createGuest = new EventEmitter<void>();
   exporting = signal(false);
+  isLocal = !environment.production;
   isQA = signal(environment.isQA);
   theme = signal<'light' | 'dark'>(this.initialTheme());
 

@@ -1,15 +1,32 @@
 <div class="navbar navbar-fixed bg-primary text-primary-content sticky top-0 z-50 shadow-md">
   <div class="flex-1">
     <button type="button" class="btn btn-ghost text-xl" (click)="refresh()">
-      Wedding @if (isQA()) { <span class="badge badge-warning badge-sm">QA</span> }
+      Wedding
+      @if (isLocal) {
+        <span class="badge badge-info badge-sm">DESA</span>
+      } @else if (isQA()) {
+        <span class="badge badge-warning badge-sm">QA</span>
+      }
     </button>
   </div>
   <div class="flex flex-none gap-2">
-    <button type="button" class="btn btn-ghost" (click)="toggleTheme()">
-      {{ theme() === 'dark' ? '☀️ Claro' : '🌙 Oscuro' }}
+    <button type="button" class="btn btn-ghost" (click)="createGuest.emit()">
+      <svg aria-hidden="true" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M16 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+        <circle cx="10" cy="7" r="4" />
+        <path d="M19 8v6M22 11h-6" />
+      </svg>
+      Nuevo invitado
     </button>
     <button type="button" class="btn btn-ghost" [disabled]="exporting()" (click)="exportGuests()">
+      <svg aria-hidden="true" class="h-5 w-5" viewBox="0 0 24 24" fill="none">
+        <rect x="4" y="3" width="17" height="18" rx="2" fill="#217346" />
+        <path d="M9 8h2l2 3 2-3h2l-3 4 3 4h-2l-2-3-2 3H9l3-4-3-4Z" fill="white" />
+      </svg>
       {{ exporting() ? 'Generando...' : 'Generar Excel' }}
+    </button>
+    <button type="button" class="btn btn-ghost" (click)="toggleTheme()">
+      {{ theme() === 'dark' ? '☀️ Claro' : '🌙 Oscuro' }}
     </button>
   </div>
 </div>
