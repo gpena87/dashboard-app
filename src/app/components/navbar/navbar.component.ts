@@ -7,7 +7,6 @@ const THEME_KEY = 'theme';
 
 @Component({
   selector: 'app-navbar',
-  imports: [],
   templateUrl: './navbar.component.html',
 })
 export class NavbarComponent {
