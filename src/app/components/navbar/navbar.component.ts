@@ -73,7 +73,7 @@ export class NavbarComponent {
           guests.forEach((guest) =>
             sheet.addRow({
               ...guest,
-              confirmation: guest.confirmation ? 'Confirmado' : 'Pendiente',
+              confirmation: guest.confirmation ? 'Confirmado' : 'No confirmado',
               createdAt: (guest.createdAt ?? '').slice(0, 10),
             })
           );

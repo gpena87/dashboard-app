@@ -44,7 +44,7 @@
                   <select class="select select-xs select-bordered w-full font-normal" [value]="filters().confirmation" (change)="setFilter('confirmation', $any($event.target).value)">
                     <option value="">Todos</option>
                     <option value="true">Confirmado</option>
-                    <option value="false">Pendiente</option>
+                    <option value="false">No confirmado</option>
                   </select>
                 </th>
                 <th>
@@ -70,7 +70,7 @@
                       {{ guest.restriccion }}
                     }
                   </td>
-                  <td>{{ guest.confirmation ? 'Confirmado' : 'Pendiente' }}</td>
+                  <td>{{ guest.confirmation ? 'Confirmado' : 'No confirmado' }}</td>
                   <td>{{ guest.createdAt | date:'yyyy-MM-dd' }}</td>
                   <td>{{ guest.message }}</td>
                   <td class="whitespace-nowrap">
@@ -126,7 +126,7 @@
             <span class="label-text mb-1">Confirmación</span>
             <select name="confirmation" class="select select-bordered w-full" [(ngModel)]="createDraft.confirmation">
               <option [ngValue]="true">Confirmado</option>
-              <option [ngValue]="false">Pendiente</option>
+              <option [ngValue]="false">No confirmado</option>
             </select>
           </label>
           <label class="form-control sm:col-span-2">
@@ -176,7 +176,7 @@
             <span class="label-text mb-1">Confirmación</span>
             <select name="confirmation" class="select select-bordered w-full" [(ngModel)]="editDraft.confirmation">
               <option [ngValue]="true">Confirmado</option>
-              <option [ngValue]="false">Pendiente</option>
+              <option [ngValue]="false">No confirmado</option>
             </select>
           </label>
           <label class="form-control sm:col-span-2">
