@@ -1,13 +1,13 @@
-<div class="flex min-h-screen flex-col">
-  <app-navbar (createGuest)="startCreate()"/>
-  <div class="guests-container flex flex-1 flex-col pt-2">
-    <div class="guests-content flex flex-1 flex-col">
+<div class="flex h-dvh flex-col">
+  <app-navbar class="shrink-0" (createGuest)="startCreate()"/>
+  <div class="guests-container flex min-h-0 flex-1 flex-col pt-2">
+    <div class="guests-content flex min-h-0 flex-1 flex-col">
       @if (loading()) {
         <p>Cargando invitados...</p>
       } @else if (error()) {
         <p class="text-error">{{ error() }}</p>
       } @else {
-        <div class="overflow-x-auto">
+        <div class="min-h-0 flex-1 overflow-auto" tabindex="0" role="region" aria-label="Lista de invitados">
           <table class="table">
             <!-- head -->
             <thead>
@@ -90,7 +90,7 @@
             </tbody>
           </table>
         </div>
-        <div class="sticky bottom-4 z-40 mt-auto mb-6 ml-4 flex w-fit flex-wrap gap-4 pt-6">
+        <div class="ml-4 flex shrink-0 flex-wrap gap-4 py-4">
           <app-confirmed-guests [count]="confirmedGuestsCount()"/>
           <app-restricted-guests [count]="restrictedGuestsCount()"/>
         </div>
@@ -214,5 +214,5 @@
       <div class="modal-backdrop" (click)="cancelDelete()"></div>
     </div>
   }
-  <app-footer/>
+  <app-footer class="shrink-0"/>
 </div>
