@@ -3,8 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NavbarComponent } from "../../components/navbar/navbar.component";
 import { FooterComponent } from "../../components/footer/footer.component";
-import { ConfirmedGuestsComponent } from '../../components/confirmed-guests/confirmed-guests.component';
-import { RestrictedGuestsComponent } from '../../components/restricted-guests/restricted-guests.component';
 import { Guest, GuestUpdate, GuestsService } from '../../services/guests.service';
 
 interface GuestFilters {
@@ -29,7 +27,7 @@ const EMPTY_FILTERS: GuestFilters = {
 
 @Component({
   selector: 'app-guests',
-  imports: [CommonModule, FormsModule, NavbarComponent, FooterComponent, ConfirmedGuestsComponent, RestrictedGuestsComponent],
+  imports: [CommonModule, FormsModule, NavbarComponent, FooterComponent],
   templateUrl: './guests.component.html',
 })
 export class GuestsComponent implements OnInit {

@@ -1,5 +1,6 @@
-  <footer class="footer sm:footer-horizontal bg-neutral text-neutral-content p-10 mt-auto">
-    <nav>
-      <h6 class="footer-title">MJ&G 2027</h6>
-    </nav>
+  <footer class="footer sm:footer-horizontal bg-neutral text-neutral-content p-4 mt-auto">
+    <div class="flex flex-wrap gap-4">
+      <app-confirmed-guests [count]="confirmedGuestsCount()"/>
+      <app-restricted-guests [count]="restrictedGuestsCount()"/>
+    </div>
 </footer>
